@@ -58,9 +58,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GL\glut32.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="ANT.OBJ" />
+    <None Include="glut32.dll" />
+    <None Include="ANT.OBJ" />
   </ItemGroup>
 </Project>

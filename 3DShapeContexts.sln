@@ -1,7 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShapeContexts", "ShapeContexts.vcxproj", "{72EC1A4B-25CF-4870-C6CE-8278EF2ECCC8}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DShapeContexts", "3DShapeContexts\3DShapeContexts.vcxproj", "{72EC1A4B-25CF-4870-C6CE-8278EF2ECCC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{287ED754-6ED2-46ED-9155-F3FB81165F48}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build.bat = build.bat
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
