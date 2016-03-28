@@ -17,9 +17,9 @@ public:
 	/// ray direction
 	Vec3<Type> dir;
 
-    /// constructor - sets position and direction of ray to (0,0,0)
+	/// constructor - sets position and direction of ray to (0,0,0)
 	Ray() { pos=Vec3<Type>::VEC0; dir=Vec3<Type>::VEC0; }
-    /// constructor - sets position and direction of ray to given vectors
+	/// constructor - sets position and direction of ray to given vectors
 	Ray(const Vec3<Type> p, const Vec3<Type> d) { pos=p; dir=d; }
 
 	void Print() { pos.Print(); dir.Print(); }

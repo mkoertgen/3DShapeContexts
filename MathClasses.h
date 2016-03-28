@@ -1,5 +1,5 @@
 /** 
-* \author Marcel Koertgen (marcel@koertgen.de)
+* \author Marcel Koertgen (marcel.koertgen@gmail.com)
 * \date 02-02-2003
 * \version 1.0
 */

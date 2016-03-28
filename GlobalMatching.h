@@ -2,9 +2,6 @@
 #define GLOBALMATCHING_H
 
 #include <iostream>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <fstream>
 
 #include "MathClasses.h"
 #include "SampleArr.h"
@@ -14,7 +11,7 @@
 * \class GlobalMatching
 * \brief template GlobalMatching class
 *
-* This class is a template GLOBALMATCHING class used the Hungarin Method
+* This class is a template GLOBALMATCHING class used the Hungarian Method
 */
 template<class Type> class GlobalMatching
 {
@@ -34,7 +31,7 @@ template<class Type> class GlobalMatching
 		Inhalt<Type> **matrix;    /// matrix elements
 		int rows;    /// number of rows for the matrix
 		int columns; /// number of rows for the matrix
-        int dim;
+		int dim;
 
 		int* liste;  // list for permutation
 		int* minassign; // minimum assignment list
@@ -51,9 +48,9 @@ template<class Type> class GlobalMatching
 
 
 		int* k;  //  list for multi assignment
-        int**  minassign2;  //minimum assignment list for Multi Assignment
+		int**  minassign2;  //minimum assignment list for Multi Assignment
 		Type** w;           // weights for costs     
-                       
+					   
 
 
 		
@@ -81,7 +78,7 @@ template<class Type> class GlobalMatching
 
 	Type LinearAssignmentMethod(const ShapeMatrix<Type>* A)
 	{	
-        if (A->rows > A->columns) 
+		if (A->rows > A->columns) 
 			dim = A->rows;
 		else
 			dim = A->columns;
@@ -99,7 +96,7 @@ template<class Type> class GlobalMatching
 			for (j = 0; j < A->columns; j++)
 					assigncost[i][j] = A->m[i][j]+1;  // add 1 to prevent too little assigncost
 
-        if (A->rows > A->columns)			
+		if (A->rows > A->columns)			
 			for (i = 0; i < A->rows; i++)
 				for (j = A->columns; j < A->rows; j++)
 					assigncost[i][j] = (Type)1;       // not zero to prevent too little assigncost
@@ -197,7 +194,7 @@ template<class Type> class GlobalMatching
 		{
 			loopcnt++;
 
-		    // scan all free rows.
+			// scan all free rows.
 			// in some cases, a free row may be replaced with another one to be scanned next.
 			k = 0; 
 			prvnumfree = numfree; 
@@ -243,16 +240,16 @@ template<class Type> class GlobalMatching
 					}
 
 					 // (re-)assign i to j1, possibly de-assigning an i0.
-			        rowsol[i] = j1; 
-                    colsol[j1] = i;
+					rowsol[i] = j1; 
+					colsol[j1] = i;
 
-                    if (i0 >= 0)           // minimum column j1 assigned earlier.
+					if (i0 >= 0)           // minimum column j1 assigned earlier.
 						if (umin < usubmin) 
 						// put in current k, and go back to that k.
 						// continue augmenting path i - j1 with i0.
 							free[--k] = i0; 
 						else 
-			           // no further augmenting reduction possible.
+					   // no further augmenting reduction possible.
 					   // store i0 in list of free rows for next phase.
 							free[numfree++] = i0; 
 			}
@@ -264,7 +261,7 @@ template<class Type> class GlobalMatching
 		{
 			freerow = free[f];       // start row of augmenting path.
 
-	       // Dijkstra shortest path algorithm.
+		   // Dijkstra shortest path algorithm.
 		   // runs until unassigned column added to shortest path tree.
 		   for (j = 0; j < dim; j++)  
 		   { 
@@ -274,8 +271,8 @@ template<class Type> class GlobalMatching
 		   }
 
 		   low=up=0; // columns in 0..low-1 are ready, now none.
-		             // columns in low..up-1 are to be scanned for current minimum, now none.
-				     // columns in up..dim-1 are to be considered later to find new minimum, 
+					 // columns in low..up-1 are to be scanned for current minimum, now none.
+					 // columns in up..dim-1 are to be considered later to find new minimum, 
 					 // at this stage the list simply contains all columns 
 		   unassignedfound = false;
 		   do
@@ -405,7 +402,7 @@ template<class Type> class GlobalMatching
 		rows = A->rows;   // initialize 
 		columns = A->columns;
 
-        if (A->rows > A->columns) 
+		if (A->rows > A->columns) 
 			dim = A->rows;
 		else
 			dim = A->columns;
@@ -414,14 +411,14 @@ template<class Type> class GlobalMatching
 
 		for (i=0; i<dim; i++)
 			matrix[i] = new Inhalt<Type>[dim];
-    		
+			
 		deleteall(matrix);
 
 		for (i=0; i<A->rows; i++) 
 			for (j=0; j<A->columns; j++) 
 				matrix[i][j].value=A->m[i][j]+1;
 
-        if (A->rows > A->columns)			
+		if (A->rows > A->columns)			
 			for (i = 0; i < A->rows; i++)
 				for (j = A->columns; j < A->rows; j++)
 					matrix[i][j].value = (Type)1;       // not zero to prevent too little assigncost
@@ -450,7 +447,7 @@ template<class Type> class GlobalMatching
 	}
 
 private:
-    void deleteEntries()
+	void deleteEntries()
 	{
 		for (i=0; i<rows; i++)
 			if (matrix[i])
@@ -599,7 +596,7 @@ private:
 
 		int z = rand()%(number-1);
 //		cout << " Zufallszahl: " << z << endl;
-        
+		
 		number =0;
 
 		for (i=0;i<dim;i++)
@@ -758,7 +755,7 @@ private:
 		int i,j;
 		Type min;
 		int assignment=0;
-    
+	
 		deleteall(matrix);
 
 		for (j=0; j< dim; j++)
@@ -768,9 +765,9 @@ private:
 				matrix[j][i].value= matrix[j][i].value - min;
 		}									
 
-	    for (i=0; i< dim; i++) 
+		for (i=0; i< dim; i++) 
 		{
-		     min = findmincolumn(matrix,i);
+			 min = findmincolumn(matrix,i);
 			 for (j=0; j<dim; j++) 
 				 matrix[j][i].value = matrix[j][i].value - min;
 		}
@@ -801,7 +798,7 @@ private:
 		rows = A->rows;   // initialize 
 		columns = A->columns;
 
-        if (A->rows > A->columns) 
+		if (A->rows > A->columns) 
 			dim = A->rows;
 		else
 			dim = A->columns;
@@ -824,7 +821,7 @@ private:
 			for (j = 0; j < A->columns; j++)
 					assigncost[i][j] = A->m[i][j];  
 
-        if (A->rows > A->columns)			
+		if (A->rows > A->columns)			
 			for (i = 0; i < A->rows; i++)
 				for (j = A->columns; j < A->rows; j++)
 					assigncost[i][j] = (Type)0;       
@@ -834,11 +831,11 @@ private:
 				for (j = 0; j < A->columns; j++)
 					assigncost[i][j] = (Type)0;
 
-        Smin = (Type)0;
+		Smin = (Type)0;
 
 		for (i=0; i<dim; i++)
 			Smin += assigncost[i][i];  // to set a minimum value
-        
+		
 		perm(liste,0,dim-1);
 
 
@@ -881,18 +878,18 @@ private:
 	{ 
 		int a, b ;
 
-        b = wer [k] ;
-        for ( a = k ; a <= n ; a ++ )
-        { 
+		b = wer [k] ;
+		for ( a = k ; a <= n ; a ++ )
+		{ 
 			wer [k] = wer [a] ; 
 			wer [a] = b ;
-            if ( k != n ) 
+			if ( k != n ) 
 				perm (wer, k + 1, n) ;
 			else 
 				minimum(wer, n) ;
-            
+			
 			wer [a] = wer [k] ;
-         }
+		 }
 		wer [k] = b ;
 		return ;
    }
@@ -924,19 +921,19 @@ private:
 		columns = A->columns;
 
 		assigncost = new cost*[rows];
-        minassign2 = new int*[rows];
+		minassign2 = new int*[rows];
 
 		min = new cost[A->rows];
 		max = new cost[A->rows];
-        eps = new cost[A->rows];
+		eps = new cost[A->rows];
 		w   = new cost*[A->rows];
 
 		k = new int[A->rows];
 
-  		for (i = 0; i < A->rows; i++)
+		for (i = 0; i < A->rows; i++)
 		{
 			// erwartungswert und streuung
-     		Type mid,sigma = 0;
+			Type mid,sigma = 0;
 
 			// find row min/max and compute variance in row[i]
 			max[i]=min[i] = A->m[i][0];
@@ -964,7 +961,7 @@ private:
 
 		// compute candidates for each row
 		Type kmid=0;
-        for (i=0; i < A->rows; i++)
+		for (i=0; i < A->rows; i++)
 		{
 			int counter = 0;
 			for (j=0; j < A->columns; j++)
@@ -978,7 +975,7 @@ private:
 			minassign2[i] = new int[k[i]];   // counter-1] ?
 			w[i] = new cost[k[i]];           // counter-1] ?
 
-            // save candidate matching values
+			// save candidate matching values
 			counter =0;
 			for (j=0; j < A->columns; j++)
 				if (A->m[i][j] <= min[i]+eps[i])
@@ -998,7 +995,7 @@ private:
 				w[i][j] = (min[i]+eps[i] - assigncost[i][j]) / eps[i];
 
 
-        					
+							
 		cost sum = lapcost = (Type)0;
 
 		for (i=0; i<A->rows; i++)
@@ -1018,7 +1015,7 @@ private:
 
 
 
-        lapcost /= (Type) A->rows;
+		lapcost /= (Type) A->rows;
 
 
 		return lapcost;

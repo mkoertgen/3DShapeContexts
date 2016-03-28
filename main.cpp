@@ -2,7 +2,7 @@
 * \author Marcel Koertgen and Gil-Joo Park
 * \date 02-02-2003
 * \version 1.0
-* This file is part of the 3D ShapeContexts Project
+* This file is part of the 3D ShapeContext Project
 */
 
 //************************** INCLUDES *****************************************************

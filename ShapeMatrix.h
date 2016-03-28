@@ -1,5 +1,5 @@
 /** 
-* \author Marcel Koertgen (marcel@koertgen.de)
+* \author Marcel Koertgen (marcel.koertgen@gmail.com)
 * \date 02-02-2003
 * \version 1.0
 */
@@ -35,7 +35,7 @@ template<class Type> class ShapeMatrix
 	/// constructor, sets all entries 0
 	ShapeMatrix(int rows, int columns) 
 	{
-        allocEntries(rows,columns);
+		allocEntries(rows,columns);
 	}
 
 	/// destructor
@@ -102,7 +102,7 @@ template<class Type> class ShapeMatrix
 			} else printf("NULL\n");
 	}
 
-    /// print to ostream
+	/// print to ostream
 	inline void Print(std::ostream &output) const 
 	{  
 		int i,j;
@@ -117,15 +117,15 @@ template<class Type> class ShapeMatrix
 			else output << "NULL" << std::endl;
 	}
 
-    /// ostream "<<" operator
+	/// ostream "<<" operator
 	friend inline std::ostream & operator << (std::ostream& output, const ShapeMatrix<Type> &s)
-    {
-      s.Print(output);
-      return output; 
-    }
+	{
+	  s.Print(output);
+	  return output; 
+	}
 
 private:
-    void deleteEntries()
+	void deleteEntries()
 	{
 		int i;
 		for (i=0; i<rows; i++)

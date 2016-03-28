@@ -1,10 +1,3 @@
-//#define SCREENSHOT
-#ifdef SCREENSHOT 
-  #include "glbmp\glbmp.h"
-  CGLBMP screenBMP;
-  int screenNum = 0;
-#endif 
-
 char str[256];  // window title, etc.
 
 bool drawMesh = true;        // draw Meshes ?
@@ -190,9 +183,6 @@ void PrintKeys(void)
 	printf("T:           Toggle Text Drawing\n");
 	printf("\n");
 	printf("F1:          Toggle Fullscreen\n");
-#ifdef SCREENSHOT
-	printf("F2:          Save Screenshot as BMP\n");
-#endif
 	printf("\n");
 	printf("Mouse Left:   Rotate\n");
 	printf("Mouse Right:  Zoom\n");
@@ -228,14 +218,6 @@ static void SpecialKey(int key, int x, int y)
 			fullscreen=false;
 			break; 
 		}
-#ifdef SCREENSHOT
-	case GLUT_KEY_F2:
-		sprintf(str, "screen%d.bmp", screenNum);
-		screenBMP.SetJPGQuality(100);
-		screenBMP.SaveScreen(str);
-		screenNum++;
-		break;
-#endif
 	case GLUT_KEY_LEFT:  transX -= 5; break;
 	case GLUT_KEY_RIGHT: transX += 5; break;
 	case GLUT_KEY_UP:    transY += 5; break;

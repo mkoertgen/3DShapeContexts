@@ -26,33 +26,47 @@ public:
 		area = (Type)0;
 	}
 
+	/// Copy Constructor
+	Face(const Face<Type> &face) {
+		v[0] = face.v[0];
+		v[1] = face.v[1];
+		v[2] = face.v[2];
+		n = face.n;
+		area = face.area;
+	}
+
 	/** Constructor
 	* \param va - pointer to VertexArray where vertices are stored
 	* \param i0 - index to vertex 0
 	* \param i1 - index to vertex 1
 	* \param i2 - index to vertex 2
 	*/
-	Face(GVertexArray<Type>* va, int i0, int i1, int i2) {
+	Face(Vec3<Type> v0, Vec3<Type> v1, Vec3<Type> v2, int i0, int i1, int i2) {
 		v[0] = i0;
 		v[1] = i1;
 		v[2] = i2;
-		n = (va->getVec3(v[1]) - va->getVec3(v[0])) ^ (va->getVec3(v[2]) - va->getVec3(v[0]));
-        area = (Type)0.5 * n.Length();
+		n = (v1 - v0) ^ (v2 - v0);
+		area = (Type)0.5 * n.Length();
 		n.Normalize();
+	}
+
+	Face(std::vector<Vec3<Type>>& vertices, int i0, int i1, int i2)
+	: Face(vertices[i0], vertices[i1], vertices[i2], i0,i1,i2)
+	{
 	}
 
 	/// Destructor
 	~Face() {}
 
-    /** Finds an intersection between the Face´s triangle and a given Ray.
+	/** Finds an intersection between the Face´s triangle and a given Ray.
 	* \param va - vertices for normal computation
 	* \param ray - The incoming ray.
 	* \param point - return intersection here, if any
 	* \return int -\n 
 	* -3 = face is degenerate, i.e. a segment or point (normal could not be computed)\n
-    * -2 = ray disjoint from triangle\n
-    * -1 = ray goes away from triangle\n
-    *  0 = intersect with plane but not inside triangle\n
+	* -2 = ray disjoint from triangle\n
+	* -1 = ray goes away from triangle\n
+	*  0 = intersect with plane but not inside triangle\n
 	*  1 = intersect in unique point\n
 	*  2 = ray and Face are in the same plane
 	*/
@@ -60,7 +74,7 @@ public:
 		if (!va) return -3;
 
 		Vec3<Type>  U = va->getVec3(v[1]) - va->getVec3(v[0]),
-		      V = va->getVec3(v[2]) - va->getVec3(v[0]);
+			  V = va->getVec3(v[2]) - va->getVec3(v[0]);
 
 		Vec3<Type> w0, w;       // ray vectors
 		Type r, a, b;    // params to calc ray-plane intersect

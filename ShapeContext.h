@@ -54,7 +54,7 @@
 * For more details on this project go <a href="http://cg.cs.uni-bonn.de>here</a>
 *<br>
 *<br>
-* You can reach us at <a href="mailto:marcel@koertgen.de">marcel@koertgen.de</a>
+* You can reach us at <a href="mailto:marcel.koertgen@gmail.com">marcel.koertgen@gmail.com</a>
 * and <a href="mailto:parkg@cs.uni-bonn.de">parkg@cs.uni-bonn.de</a>
 *
 */
@@ -75,7 +75,7 @@
 */
 template<class Type>class ShapeContext {
 public:
-    /// The SampleArray
+	/// The SampleArray
 	SampleArr<Type>* sams;
 	/// The number of samples in the SampleArray
 	int numSams;
@@ -88,7 +88,7 @@ public:
 	* As a rule of thumb <numSectorX> should be half of <numSectorY>
 	*/
 	int	 numSectorX,
-	     numSectorY;
+		 numSectorY;
 	/// The number of bins to use in all local histograms; xsectors*ysectors*shells
 	int  numBins;
 
@@ -96,12 +96,12 @@ public:
 	Type alpha[3],gamma[3];
 	
 	/** The log-base to use for shell-radii; increase that value to weight nearby samples more
-    * than those far away.
+	* than those far away.
 	* For rlogbase=1 the shells are equi-distanced
 	* For rlogbase=2 shell<i+1> is double the width of shell<i>
 	*/
 	int rlogbase;
-    /** <radius> holds double the radius of the meshes bounding sphere, so with
+	/** <radius> holds double the radius of the meshes bounding sphere, so with
 	* a local radius factor of 1 no local shape will have outliers.
 	*
 	* 2*meshradius might be an unnecessary large value often resulting in too
@@ -126,7 +126,7 @@ public:
 	* \param b2 - weights for match term weighting
 	*/
 	ShapeContext(SampleArr<Type> *samples=0,
-		         const int shells=4,
+				 const int shells=4,
 				 const int xsectors=6,
 				 const int ysectors=12,
 				 const int sh_rlog=1,
@@ -172,7 +172,7 @@ public:
 	/* sx -> (center - sample<sInd>) normalized
 	/* sy -> projection of PA[0] (or PA[1] if sx || PA[0]) onto plane with normal <sx>,
 	/* sz -> sx^sy
-    */
+	*/
 	void computeSystem(int sInd,
 					   Vec3<Type> &sx,
 					   Vec3<Type> &sy,
@@ -223,9 +223,9 @@ public:
 	* \param lz - Local Z Axis for this histogram
 	* \param rad - 0 < rad <= 1.0f, sphere radius
 	*/
-    void computeHistogram(bool overwrite,
+	void computeHistogram(bool overwrite,
 						  const int sInd,
-		                  const Vec3<Type> &lx=Vec3<Type>::VECX,
+						  const Vec3<Type> &lx=Vec3<Type>::VECX,
 						  const Vec3<Type> &ly=Vec3<Type>::VECY,
 						  const Vec3<Type> &lz=Vec3<Type>::VECZ,
 						  const Type rad=(Type)1.0)
@@ -252,7 +252,7 @@ public:
 			Type ri;       // vector i큦 distance from our sample; used for shell-number calc.
 
 			Matrix<Type> *A = new Matrix<Type>(), // rotation matrix to use for our local system
-				         *B = new Matrix<Type>();
+						 *B = new Matrix<Type>();
 			A->set_rotation(lx,ly,lz);
 			B->set_inverse_rotation(lx,ly,lz);
 
@@ -260,7 +260,7 @@ public:
 			if (histosSys[sInd] != NULL) free(histosSys[sInd]);
 			histosSys[sInd] = A;
 
-            // loop through samples (i!= sInd)
+			// loop through samples (i!= sInd)
 			for (i=0; i<numSams; i++)
 			{
 				if (i!=sInd) //	for sample i compute bin number k
@@ -300,7 +300,7 @@ public:
 			// delete unused Matrix
 			delete B;
 
-            // compute relative numbers
+			// compute relative numbers
 			if (histos[sInd]!=NULL)	free(histos[sInd]);
 			histos[sInd] = new Type[numBins];
 			for (k=0; k<numBins; k++)
@@ -325,9 +325,9 @@ public:
 
 		Type st,at,pt,tmp; // Shape-, Appearance-, Position-Term
 			 st=at=pt=0;
- 		int k;
+		int k;
 
-        // compute shape term
+		// compute shape term
 		if (fabs(gamma[0]) > EPSF)
 		{
 			for (k=0; k<numBins; k++)
@@ -343,7 +343,7 @@ public:
 		if (fabs(gamma[1]) > EPSF)
 		{
 			Vec3<Type> u = Vec3<Type>(histosSys[i]->m[0],histosSys[i]->m[3],histosSys[i]->m[6]),
-				       v = Vec3<Type>(B->histosSys[j]->m[0],B->histosSys[j]->m[3],B->histosSys[j]->m[6]);
+					   v = Vec3<Type>(B->histosSys[j]->m[0],B->histosSys[j]->m[3],B->histosSys[j]->m[6]);
 			for (k=0; k<3; k++)
 				at += alpha[k]*B->alpha[k]* SQR(1-(u*v));
 			
@@ -366,10 +366,10 @@ public:
 		return (gamma[0]*st + gamma[1]*at + gamma[2]*pt);
 	}
 
-    /// Prints histograms (uses printf)
+	/// Prints histograms (uses printf)
 	inline void print() {
 		printf("ShapeContext:\n");
-        printf(" Samples: %d\n", numSams);
+		printf(" Samples: %d\n", numSams);
 		printf(" x-Sectors: %d\n", numSectorX);
 		printf(" y-Sectors: %d\n", numSectorY);
 		printf(" Shells: %d\n", numShells);
@@ -392,7 +392,7 @@ public:
 		}
 	}
 
-    /// print to ostream
+	/// print to ostream
 	inline void Print(std::ostream &output) const 
 	{
 		output << " Samples: " << numSams << std::endl;
@@ -418,16 +418,16 @@ public:
 			}
 		}
 	}
-    /// ostream "<<" operator
+	/// ostream "<<" operator
 	friend inline std::ostream & operator << (std::ostream& output, const ShapeContext<Type> &s)
-    {
-      s.Print(output);
-      return output; 
-    }
+	{
+	  s.Print(output);
+	  return output; 
+	}
 
 	inline void computeHistograms(Type rfac, bool local_orientation)
 	{
-        // vectors for a local histogram큦 local system
+		// vectors for a local histogram큦 local system
 		Vec3<Type> sx=Vec3<Type>::VECX, sy=Vec3<Type>::VECY, sz=Vec3<Type>::VECZ;
 		int i;
 
@@ -447,7 +447,7 @@ public:
 		// a (quadratic) matrix saving values from local matching
 		ShapeMatrix<Type> *A = new ShapeMatrix<Type>(this->numSams, B->numSams);
 
-        // vectors for a local histogram큦 local system
+		// vectors for a local histogram큦 local system
 		Vec3<Type> sxA=Vec3<Type>::VECX, syA=Vec3<Type>::VECY, szA=Vec3<Type>::VECZ,
 				   sxB=Vec3<Type>::VECX, syB=Vec3<Type>::VECY, szB=Vec3<Type>::VECZ;
 
@@ -478,23 +478,23 @@ public:
 			histosSys[sInd]!=NULL)
 		{
 //			int i,j,k; // secx, secy, shells
-            Vec3<Type> p = sams->samples->getVec3(sInd);
+			Vec3<Type> p = sams->samples->getVec3(sInd);
 
 			glPushAttrib(GL_ENABLE_BIT); // save lighting state
 			glDisable(GL_LIGHTING); // is lighting on ?
 			glPushMatrix();
 			glTranslatef(p.x, p.y, p.z);
 
-            Vec3<Type> x(histosSys[sInd]->m[0],
-				         histosSys[sInd]->m[3],
+			Vec3<Type> x(histosSys[sInd]->m[0],
+						 histosSys[sInd]->m[3],
 						 histosSys[sInd]->m[6]);
 
 			Vec3<Type> y(histosSys[sInd]->m[1],
-				         histosSys[sInd]->m[4],
+						 histosSys[sInd]->m[4],
 						 histosSys[sInd]->m[7]);
 
 			Vec3<Type> z(histosSys[sInd]->m[2],
-				         histosSys[sInd]->m[5],
+						 histosSys[sInd]->m[5],
 						 histosSys[sInd]->m[8]);
 
 			x *= rfac*radius;
@@ -502,17 +502,17 @@ public:
 			z *= rfac*radius;
 
 			// draw C.O.S.
-            glColor4f(1,0,0,1);
+			glColor4f(1,0,0,1);
 			glBegin(GL_LINES);
 			   glVertex3f(0,0,0);
 			   glVertex3f(x.x, x.y, x.z);
 			glEnd();
-            glColor4f(0,1,0,1);
+			glColor4f(0,1,0,1);
 			glBegin(GL_LINES);
 			   glVertex3f(0,0,0);
 			   glVertex3f(y.x, y.y, y.z);
 			glEnd();
-            glColor4f(0,0,1,1);
+			glColor4f(0,0,1,1);
 			glBegin(GL_LINES);
 			   glVertex3f(0,0,0);
 			   glVertex3f(z.x, z.y, z.z);
@@ -609,7 +609,7 @@ private:
 			shell = (int)( numShells * pow(rlogbase, numShells*((ri/r)-1) ) );
 		// for log-base=1 it is linear -> shells are equi-distant
 		else
-		    shell = (int)( (ri/r) * numShells );
+			shell = (int)( (ri/r) * numShells );
 
 		// return strict ordered index
 		// - <numShells> bins in each sector

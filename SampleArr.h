@@ -1,5 +1,5 @@
 /** 
-* \author Marcel Koertgen (marcel@koertgen.de)
+* \author Marcel Koertgen (marcel.koertgen@gmail.com)
 * \date 02-02-2003
 * \version 1.0
 */
@@ -99,7 +99,7 @@ public:
 		if (normals) delete normals;
 	}
 	
-    /** This method draws the sample Array as simple GL_POINTS.
+	/** This method draws the sample Array as simple GL_POINTS.
 	* \param drawNormals - If set to 1 normals will also be drawn as GL_LINES.
 	*/
 	void draw(int drawNormals) {
@@ -131,7 +131,7 @@ public:
 		}
 	}
 
-    /** This method samples the mesh to get samples.
+	/** This method samples the mesh to get samples.
 	* \param sectors - number of sectors to divide sphere into
 	*\n
 	* The strategy used here is very simple:
@@ -145,7 +145,7 @@ public:
 	*  The idea is that for compact models (or say models of topological genus 0) the
 	*  sampling will lead to roughly uniform distributed samples.
 	*/
-    void sampleMesh(int sectors) {
+	void sampleMesh(int sectors) {
 		if (mesh) {
 			int j,i;
 			Type xAng, zAng;
@@ -183,7 +183,7 @@ public:
 		}
 	}
 
-    /** This is the Osada method to samples a mesh. The strategy used here
+	/** This is the Osada method to samples a mesh. The strategy used here
 	* is also simple:
 	*
 	*     1. given the mesh´s area <A> as the sum of all faces area <ai>, generate
@@ -254,12 +254,12 @@ public:
 			for (i=1; i<numSamples; i++)
 			{
 				printf(", ");
-			    samples->getVec3(i).print();
+				samples->getVec3(i).print();
 			}
 			printf("]\n");
 		}
 	}
-    /// print to ostream
+	/// print to ostream
 	inline void Print(std::ostream &output) const 
 	{  
 		output << " numSamples: " << numSamples << endl;
@@ -277,16 +277,16 @@ public:
 			output << "]" << endl;
 		}
 	}
-    /// ostream "<<" operator
+	/// ostream "<<" operator
 	friend inline std::ostream & operator << (std::ostream& output, const SampleArr &s)
-    {
-      s.Print(output);
-      return output; 
-    }
+	{
+	  s.Print(output);
+	  return output; 
+	}
 
 
 
-    /// TriMesh to sample
+	/// TriMesh to sample
 	TriMesh<Type>* mesh;          
 	/// List of Samples
 	GVertexArray<Type>* samples;  

@@ -1,5 +1,5 @@
 /** 
-* \author Marcel Koertgen (marcel@koertgen.de)
+* \author Marcel Koertgen (marcel.koertgen@gmail.com)
 * \date 02-02-2003
 * \version 1.0
 */
@@ -13,7 +13,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "GL/glut.h"
-#include <fstream>  // file reading
+#include <fstream>
 #include <sstream>
 #include <vector>
 
@@ -313,23 +313,15 @@ public:
 		std::string contents = get_file_contents(fileName);
 		std::istringstream stream(contents);
 
-		int vertexCount= 0, faceCount=0;
+		std::vector<Vec3<Type>> vVertices;
+		std::vector<Face<Type>> vFaces;
 		Vec3<Type> v;
-		int i0, i1, i2;
+		std::vector<int> faceIndices;
+		Face<Type> face;
 
 		vBMax = Vec3<Type>(-1000000,-1000000,-1000000); // initialize BBox
 		vBMin = Vec3<Type>( 1000000, 1000000, 1000000);
 
-		if (vertices) delete vertices; // free space for old data
-		if (faces) deleteFaces();
-
-		getNoMeshElts(stream, numVertices, numFaces); // alloc space for new data
-		faces = allocFaces(numFaces);
-		vertices = new GVertexArray<Type>(numVertices);				
-		area = 0;
-		aSum_lp = new Type[numFaces+1];
-		aSum_lp[0] = (Type)0;
-		
 		std::string line;
 		int lineNo = 0;
 		while (!safeGetline(stream, line).eof())
@@ -341,18 +333,48 @@ public:
 				case 'v':
 					v = parseVector(line);
 					v.UpdateMinMax(vBMin,vBMax); // update BBox
-					vertices->setVec3(vertexCount++, v); // it´s a face line, so read in a new face
+					vVertices.push_back(v);
 					break;
 				case 'f':
-					parseFace(line, i0, i1, i2);
-					faces[faceCount] = new Face<Type>(vertices, --i0, --i1, --i2); // add face
-					area += faces[faceCount++]->area;
-					aSum_lp[faceCount] = area;
+					parseFace(line, faceIndices);
+					switch (faceIndices.size())
+					{
+						case 4: // quad
+							face = Face<Type>(vVertices, faceIndices[2], faceIndices[3], faceIndices[0]);
+							vFaces.push_back(face);
+						case 3: // triangle
+						default:
+							face = Face<Type>(vVertices, faceIndices[0], faceIndices[1], faceIndices[2]);
+							vFaces.push_back(face);
+							break;
+					}
 					break;
 			}
 		}
 
-		vBCenter = (Type)0.5 * (vBMax+vBMin); // we already have Max and Min
+
+		if (vertices) delete vertices;
+		numVertices = vVertices.size();
+		vertices = new GVertexArray<Type>(numVertices);
+		for (int i = 0; i < numVertices; i++)
+			vertices->setVec3(i, vVertices[i]);
+
+		vBCenter = (Type)0.5 * (vBMax + vBMin);
+
+		if (faces) deleteFaces();
+		numFaces = vFaces.size();
+		faces = allocFaces(numFaces);
+		area = 0;
+		aSum_lp = new Type[numFaces];
+		aSum_lp[0] = (Type)0;
+		for (int i = 0; i < numFaces; i++)
+		{
+			face = vFaces[i];
+			faces[i] = new Face<Type>(face);
+			area += face.area;
+			aSum_lp[i + 1] = area;
+		}
+
 		return true;
 	}
 
@@ -749,22 +771,19 @@ private:
 		return Vec3<Type>(vx, vy, vz);
 	}
 
-	void parseFace(std::string& line, int &i0, int &i1, int &i2)
+	void parseFace(std::string& line, std::vector<int>& indices)
 	{
 		std::vector<std::string> tokens;
 		split(tokens, line, " ");
 
-		std::vector<std::string> tokens2;
-		split(tokens2, tokens[1], "/");
-		i0 = stoi(std::string(tokens2[0]));
-
-		tokens2.clear();
-		split(tokens2, tokens[2], "/");
-		i1 = stoi(std::string(tokens2[0]));
-
-		tokens2.clear();
-		split(tokens2, tokens[3], "/");
-		i2 = stoi(std::string(tokens2[0]));
+		indices.clear();
+		for (std::vector<int>::size_type i = 1; i != tokens.size(); i++)
+		{
+			std::vector<std::string> tokens2;
+			split(tokens2, tokens[i], "/");
+			int index = stoi(std::string(tokens2[0]));
+			indices.push_back(--index);
+		}
 	}
 
 	void split(std::vector<std::string> & theStringVector,  /* Altered/returned value */
@@ -806,21 +825,6 @@ private:
 		result = new Face<Type>*[numFaces];
 		for (i=0; i < numFaces; i++) result[i] = NULL;
 		return result;
-	}
-
-	/// count number of vertices and faces in file
-	void getNoMeshElts(std::istream& stream, int &numV, int &numF) { 
-		numV=numF = 0;
-		std::string line;
-		while (!safeGetline(stream, line).eof()) {
-			if (line.empty() || line[0] == '#' || line[1] != ' ') continue;
-			switch (line[0])
-			{
-				case 'v': numV++; break;
-				case 'f': numF++; break;
-			}
-		}
-		stream.seekg(0);
 	}
 
 	// calculate Eigen-values and -vectors from a symmetrical 3x3 matrix - Jacobi-method

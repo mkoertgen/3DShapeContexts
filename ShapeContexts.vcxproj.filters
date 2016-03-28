@@ -57,4 +57,10 @@
       <Filter>Header-Dateien</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GL\glut32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="ANT.OBJ" />
+  </ItemGroup>
 </Project>
